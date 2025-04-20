@@ -33,6 +33,7 @@ contract OrganRegistry {
     event OrganAdded(string indexed name, OrganType indexed organType, Codes.Region indexed region);
 
     error OrganAlreadyExists(string name);
+    error OnlyFederalLevelAllowed();
 
     function addOrgan(OrganType organType, Codes.Region region) external {
         localOrgansIdsGenerator++;
@@ -48,10 +49,19 @@ contract OrganRegistry {
         } else if (organType == OrganType.REGIONAL_CONFERENCE) {
             name = region.regionalConference();
         } else if (organType == OrganType.CONGRESS) {
+            if (region != Codes.Region.FEDERAL) {
+                revert OnlyFederalLevelAllowed();
+            }
             name = Codes.congress();
         } else if (organType == OrganType.CHAIRPERSON) {
+            if (region != Codes.Region.FEDERAL) {
+                revert OnlyFederalLevelAllowed();
+            }
             name = Codes.chairperson();
         } else if (organType == OrganType.CENTRAL_SOVIET) {
+            if (region != Codes.Region.FEDERAL) {
+                revert OnlyFederalLevelAllowed();
+            }
             name = Codes.centralSoviet();
         }
         Organ storage organ = _organs[keccak256(abi.encodePacked(name))];
