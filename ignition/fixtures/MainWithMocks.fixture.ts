@@ -1,6 +1,4 @@
-import DeployMockERC20 from '../ignition/modules/deploy/mocks/DeployMockERC20.ignition';
-
-import mainStage from '../stages/Main.stage';
+import DeployMockERC20 from '../modules/deploy/mocks/DeployMockERC20.ignition';
 
 export default (hre: any) =>
   async function mainFixture() {
