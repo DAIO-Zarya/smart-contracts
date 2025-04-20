@@ -31,18 +31,17 @@ library XCell {
         return self.column;
     }
 
-    function setScale(TwosComplementXCell storage self, uint8 numerator, uint8 denominator) internal {
+    function setScale(TwosComplementXCell storage self, Scale memory scale) internal {
         if (self.scale.isScaleSet) {
             revert ScaleIsAlreadySet();
         }
-        if (numerator == 0) {
+        if (scale.numerator == 0) {
             revert InvalidScaleNumerator();
         }
-        if (denominator == 0) {
+        if (scale.denominator == 0) {
             revert InvalidScaleDenominator();
         }
-        self.scale.scaleNumerator = numerator;
-        self.scale.scaleDenominator = denominator;
+        self.scale = scale;
         self.scale.isScaleSet = true;
     }
 

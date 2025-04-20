@@ -1,9 +1,14 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.28;
 
-import { RLEAppendOnlyLib } from './libraries/RLEAppendOnlyLib.sol';
+import { EnumerableSet } from "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
+
+import { RLEAppendOnlyLib } from './RLEAppendOnlyLib.sol';
 
 library YCell {
+    using EnumerableSet for EnumerableSet.Bytes32Set;
+    using RLEAppendOnlyLib for RLEAppendOnlyLib.Entry;
+
     struct RLEYCell {
         uint256 row;
         uint256 column;
@@ -27,7 +32,7 @@ library YCell {
             revert CategoriesAlreadySet();
         }
         for (uint256 i = 0; i < categories.length; i++) {
-            categories[i] = true;
+            self.categories[categories[i]] = true;
         }
         self.areCategoriesSet = true;
     }

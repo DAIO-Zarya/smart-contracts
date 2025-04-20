@@ -47,7 +47,7 @@ contract OpinionMatrix is IOpinionMatrix {
         }
 
         XCell.TwosComplementXCell storage xCell = _xCells[xIndex][yIndex];
-        xCell.setScale(numerator, denominator);
+        xCell.setScale(XCell.Scale(numerator, denominator, false));
         xCell.add(firstValue);
         xCell.row = xIndex;
         xCell.column = yIndex;
