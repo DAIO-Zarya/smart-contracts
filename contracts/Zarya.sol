@@ -26,7 +26,7 @@ contract Zarya {
     }
 
     mapping(uint256 x => mapping(uint256 y => CategoricalCell cell)) internal _categoricalMatrix;
-    mapping(uint256 x => mapping(uint256 y => NumericalCell)) internal _numericalMatrix;
+    mapping(uint256 x => mapping(uint256 y => NumericalCell cell)) internal _numericalMatrix;
 
     error CategoryAlreadyExists(uint64 category);
     error InvalidCategory(uint64 category);
@@ -61,6 +61,26 @@ contract Zarya {
             revert CategoryAlreadyExists(category);
         }
         emit CategoryAdded(x, y, category);
+    }
+
+    function _setNumbericalCellDescription(
+        uint256 x,
+        uint256 y,
+        string memory xDescription,
+        string memory yDescription
+    ) external {
+        _numericalMatrix[x][y].xDescription = xDescription;
+        _numericalMatrix[x][y].yDescription = yDescription;
+    }
+
+    function _setCategoricalCellDescription(
+        uint256 x,
+        uint256 y,
+        string memory xDescription,
+        string memory yDescription
+    ) external {
+        _categoricalMatrix[x][y].xDescription = xDescription;
+        _categoricalMatrix[x][y].yDescription = yDescription;
     }
 
     function _setDecimals(
