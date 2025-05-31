@@ -6,7 +6,7 @@ library Codes {
     enum Region {
         FEDERAL, // = 00,
         ADYGEA_REPUBLIC, // = 01,
-        BASHKTORTOSTAN_REPUBLIC, // = 02,
+        BASHKORTOSTAN_REPUBLIC, // = 02,
         BURYATIA_REPUBLIC, // = 03,
         ALTAY_REPUBLIC, // = 04,
         DAGHESTAN_REPUBLIC, // = 05,
@@ -98,6 +98,8 @@ library Codes {
         YAMALO_NENETSKY_AUTONOMNY_OKRUG, // = 89,
         EXTERNAL_LANDS_88, // = 88,
         EXTERNAL_LANDS_94, // = 94,
+
+        // The following regions de jure are a part of the Russian Federation and are included for completeness.
         DONETSK_PEOPLES_REPUBLIC, // = 80,
         LUGANSK_PEOPLES_REPUBLIC, // = 81,
         HERSONSKAYA_OBLAST, // = 84,
@@ -116,38 +118,102 @@ library Codes {
         return string(abi.encodePacked(toString(region), ".", number, ".", SOVIET_POSTFIX));
     }
 
+    function localSovietX(Region region, uint256 number) internal pure returns (uint256) {
+        return uint256(keccak256(abi.encodePacked(localSoviet(region, number), ".X")));
+    }
+
+    function localSovietY(Region region, uint256 number) internal pure returns (uint256) {
+        return uint256(keccak256(abi.encodePacked(localSoviet(region, number), ".Y")));
+    }
+
     function localGeneralAssembly(Region region, uint256 number) internal pure returns (string memory) {
         return string(abi.encodePacked(toString(region), ".", number, ".", GENERAL_ASSEMBLY_POSTFIX));
+    }
+
+    function localGeneralAssemblyX(Region region, uint256 number) internal pure returns (uint256) {
+        return uint256(keccak256(abi.encodePacked(localGeneralAssembly(region, number), ".X")));
+    }
+
+    function localGeneralAssemblyY(Region region, uint256 number) internal pure returns (uint256) {
+        return uint256(keccak256(abi.encodePacked(localGeneralAssembly(region, number), ".Y")));
     }
 
     function regionalSoviet(Region region) internal pure returns (string memory) {
         return string(abi.encodePacked(toString(region), ".", SOVIET_POSTFIX));
     }
 
+    function regionalSovietX(Region region) internal pure returns (uint256) {
+        return uint256(keccak256(abi.encodePacked(regionalSoviet(region), ".X")));
+    }
+
+    function regionalSovietY(Region region) internal pure returns (uint256) {
+        return uint256(keccak256(abi.encodePacked(regionalSoviet(region), ".Y")));
+    }
+
     function regionalConference(Region region) internal pure returns (string memory) {
         return string(abi.encodePacked(toString(region), ".", CONFERENCE_POSTFIX));
+    }
+
+    function regionalConferenceX(Region region) internal pure returns (uint256) {
+        return uint256(keccak256(abi.encodePacked(regionalConference(region), ".X")));
+    }
+
+    function regionalConferenceY(Region region) internal pure returns (uint256) {
+        return uint256(keccak256(abi.encodePacked(regionalConference(region), ".Y")));
     }
 
     function regionalGeneralAssembly(Region region) internal pure returns (string memory) {
         return string(abi.encodePacked(toString(region), ".", GENERAL_ASSEMBLY_POSTFIX));
     }
 
+    function regionalGeneralAssemblyX(Region region) internal pure returns (uint256) {
+        return uint256(keccak256(abi.encodePacked(regionalGeneralAssembly(region), ".X")));
+    }
+
+    function regionalGeneralAssemblyY(Region region) internal pure returns (uint256) {
+        return uint256(keccak256(abi.encodePacked(regionalGeneralAssembly(region), ".Y")));
+    }
+
     function chairperson() internal pure returns (string memory) {
         return CHAIRPERSON_POSTFIX;
+    }
+
+    function chairpersonX() internal pure returns (uint256) {
+        return uint256(keccak256(abi.encodePacked(chairperson(), ".X")));
+    }
+
+    function chairpersonY() internal pure returns (uint256) {
+        return uint256(keccak256(abi.encodePacked(chairperson(), ".Y")));
     }
 
     function centralSoviet() internal pure returns (string memory) {
         return SOVIET_POSTFIX;
     }
 
+    function centralSovietX() internal pure returns (uint256) {
+        return uint256(keccak256(abi.encodePacked(centralSoviet(), ".X")));
+    }
+
+    function centralSovietY() internal pure returns (uint256) {
+        return uint256(keccak256(abi.encodePacked(centralSoviet(), ".Y")));
+    }
+
     function congress() internal pure returns (string memory) {
         return CONGRESS_POSTFIX;
+    }
+
+    function congressX() internal pure returns (uint256) {
+        return uint256(keccak256(abi.encodePacked(congress(), ".X")));
+    }
+
+    function congressY() internal pure returns (uint256) {
+        return uint256(keccak256(abi.encodePacked(congress(), ".Y")));
     }
 
     function toString(Region region) internal pure returns (string memory) {
         if (region == Region.FEDERAL) return "00";
         if (region == Region.ADYGEA_REPUBLIC) return "01";
-        if (region == Region.BASHKTORTOSTAN_REPUBLIC) return "02";
+        if (region == Region.BASHKORTOSTAN_REPUBLIC) return "02";
         if (region == Region.BURYATIA_REPUBLIC) return "03";
         if (region == Region.ALTAY_REPUBLIC) return "04";
         if (region == Region.DAGHESTAN_REPUBLIC) return "05";
@@ -239,6 +305,8 @@ library Codes {
         if (region == Region.YAMALO_NENETSKY_AUTONOMNY_OKRUG) return "89";
         if (region == Region.EXTERNAL_LANDS_88) return "88";
         if (region == Region.EXTERNAL_LANDS_94) return "94";
+        
+        // The following regions de jure are a part of the Russian Federation and are included for completeness.
         if (region == Region.DONETSK_PEOPLES_REPUBLIC) return "80";
         if (region == Region.LUGANSK_PEOPLES_REPUBLIC) return "81";
         if (region == Region.HERSONSKAYA_OBLAST) return "84";
