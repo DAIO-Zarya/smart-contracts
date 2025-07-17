@@ -25,7 +25,7 @@ jobs:
           forge --version
 
       - name: Install Soldeer
-        run: forge init soldeer --clean
+        run: forge soldeer init --clean
 
       - name: Install Dependencies
         run: forge soldeer install
