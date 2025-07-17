@@ -25,41 +25,26 @@ contract Zarya {
         string yDescription;
     }
 
-    mapping(uint256 x => mapping(uint256 y => CategoricalCell cell))
-        internal _categoricalMatrix;
-    mapping(uint256 x => mapping(uint256 y => NumericalCell cell))
-        internal _numericalMatrix;
+    mapping(uint256 x => mapping(uint256 y => CategoricalCell cell)) internal _categoricalMatrix;
+    mapping(uint256 x => mapping(uint256 y => NumericalCell cell)) internal _numericalMatrix;
 
     error CategoryAlreadyExists(uint64 category);
     error InvalidCategory(uint64 category);
 
-    event ValueAdded(
-        uint256 indexed x,
-        uint256 indexed y,
-        uint64 value,
-        address indexed author
-    );
+    event ValueAdded(uint256 indexed x, uint256 indexed y, uint64 value, address indexed author);
     event CategoryAdded(uint256 indexed x, uint256 indexed y, uint64 category);
 
-    function _addValue(
-        uint256 x,
-        uint256 y,
-        uint64 value,
-        address author,
-        bool isCategorical
-    ) internal {
+    function _addValue(uint256 x, uint256 y, uint64 value, address author, bool isCategorical) internal {
         if (isCategorical) {
             if (!_categoricalMatrix[x][y].allowedCategories.contains(value)) {
                 revert InvalidCategory(value);
             }
             _categoricalMatrix[x][y].categoricalSample.push(
-                uint32(block.timestamp),
-                uint224(bytes28(abi.encodePacked(author, value)))
+                uint32(block.timestamp), uint224(bytes28(abi.encodePacked(author, value)))
             );
         } else {
             _numericalMatrix[x][y].numericalSample.push(
-                uint32(block.timestamp),
-                uint224(bytes28(abi.encodePacked(author, value)))
+                uint32(block.timestamp), uint224(bytes28(abi.encodePacked(author, value)))
             );
         }
         emit ValueAdded(x, y, value, author);
@@ -72,12 +57,9 @@ contract Zarya {
         emit CategoryAdded(x, y, category);
     }
 
-    function _setNumericalCellDescription(
-        uint256 x,
-        uint256 y,
-        string memory xDescription,
-        string memory yDescription
-    ) external {
+    function _setNumericalCellDescription(uint256 x, uint256 y, string memory xDescription, string memory yDescription)
+        external
+    {
         _numericalMatrix[x][y].xDescription = xDescription;
         _numericalMatrix[x][y].yDescription = yDescription;
     }
@@ -96,28 +78,15 @@ contract Zarya {
         _numericalMatrix[x][y].decimals = decimals;
     }
 
-    function findCategoricalValue(
-        uint256 x,
-        uint256 y,
-        uint32 timestamp
-    ) external view returns (uint224) {
-        return
-            _categoricalMatrix[x][y].categoricalSample.upperLookup(timestamp);
+    function findCategoricalValue(uint256 x, uint256 y, uint32 timestamp) external view returns (uint224) {
+        return _categoricalMatrix[x][y].categoricalSample.upperLookup(timestamp);
     }
 
-    function findNumericalValue(
-        uint256 x,
-        uint256 y,
-        uint32 timestamp
-    ) external view returns (uint224) {
+    function findNumericalValue(uint256 x, uint256 y, uint32 timestamp) external view returns (uint224) {
         return _numericalMatrix[x][y].numericalSample.upperLookup(timestamp);
     }
 
-    function isCategoryAllowed(
-        uint256 x,
-        uint256 y,
-        uint64 category
-    ) external view returns (bool) {
+    function isCategoryAllowed(uint256 x, uint256 y, uint64 category) external view returns (bool) {
         return _categoricalMatrix[x][y].allowedCategories.contains(category);
     }
 

@@ -1,0 +1,14 @@
+{
+  "solidity.packageDefaultDependenciesContractsDirectory": "src",
+  "solidity.packageDefaultDependenciesDirectory": "lib",
+  "editor.formatOnSave": true,
+  "[solidity]": {
+    "editor.defaultFormatter": "JuanBlanco.solidity"
+  },
+  "solidity.formatter": "forge",
+  "solidity.compileUsingRemoteVersion": "v0.8.28",
+  "solidity.remappings": [
+    "@openzeppelin-contracts-5.4.0-rc.1/=dependencies/@openzeppelin-contracts-5.4.0-rc.1/",
+    "forge-std-1.9.7/=dependencies/forge-std-1.9.7/"
+  ]
+}

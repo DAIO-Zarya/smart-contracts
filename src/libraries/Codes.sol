@@ -98,19 +98,19 @@ library Codes {
         YAMALO_NENETSKY_AUTONOMNY_OKRUG, // = 89,
         EXTERNAL_LANDS_88, // = 88,
         EXTERNAL_LANDS_94, // = 94,
-
         // The following regions de jure are a part of the Russian Federation and are included for completeness.
         DONETSK_PEOPLES_REPUBLIC, // = 80,
         LUGANSK_PEOPLES_REPUBLIC, // = 81,
         HERSONSKAYA_OBLAST, // = 84,
         ZAPOROZHSKAYA_OBLAST // = 85
+
     }
 
-    string constant internal CONGRESS_POSTFIX = unicode"СЗД";
-    string constant internal SOVIET_POSTFIX = unicode"СОВ";
-    string constant internal CHAIRPERSON_POSTFIX = unicode"ПРЛ";
-    string constant internal GENERAL_ASSEMBLY_POSTFIX = unicode"ОБС";
-    string constant internal CONFERENCE_POSTFIX = unicode"КОН";
+    string internal constant CONGRESS_POSTFIX = unicode"СЗД";
+    string internal constant SOVIET_POSTFIX = unicode"СОВ";
+    string internal constant CHAIRPERSON_POSTFIX = unicode"ПРЛ";
+    string internal constant GENERAL_ASSEMBLY_POSTFIX = unicode"ОБС";
+    string internal constant CONFERENCE_POSTFIX = unicode"КОН";
 
     error UnknownRegion(Region region);
 
@@ -305,7 +305,7 @@ library Codes {
         if (region == Region.YAMALO_NENETSKY_AUTONOMNY_OKRUG) return "89";
         if (region == Region.EXTERNAL_LANDS_88) return "88";
         if (region == Region.EXTERNAL_LANDS_94) return "94";
-        
+
         // The following regions de jure are a part of the Russian Federation and are included for completeness.
         if (region == Region.DONETSK_PEOPLES_REPUBLIC) return "80";
         if (region == Region.LUGANSK_PEOPLES_REPUBLIC) return "81";
