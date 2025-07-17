@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.28;
 
-library Codes {
+library Regions {
     // https://www.consultant.ru/document/cons_doc_LAW_287480/8f29ebe5f8d588f758502bc41ff2da96a45fc497/
     enum Region {
         FEDERAL, // = 00,
@@ -106,109 +106,7 @@ library Codes {
 
     }
 
-    string internal constant CONGRESS_POSTFIX = unicode"СЗД";
-    string internal constant SOVIET_POSTFIX = unicode"СОВ";
-    string internal constant CHAIRPERSON_POSTFIX = unicode"ПРЛ";
-    string internal constant GENERAL_ASSEMBLY_POSTFIX = unicode"ОБС";
-    string internal constant CONFERENCE_POSTFIX = unicode"КОН";
-
     error UnknownRegion(Region region);
-
-    function localSoviet(Region region, uint256 number) internal pure returns (string memory) {
-        return string(abi.encodePacked(toString(region), ".", number, ".", SOVIET_POSTFIX));
-    }
-
-    function localSovietX(Region region, uint256 number) internal pure returns (uint256) {
-        return uint256(keccak256(abi.encodePacked(localSoviet(region, number), ".X")));
-    }
-
-    function localSovietY(Region region, uint256 number) internal pure returns (uint256) {
-        return uint256(keccak256(abi.encodePacked(localSoviet(region, number), ".Y")));
-    }
-
-    function localGeneralAssembly(Region region, uint256 number) internal pure returns (string memory) {
-        return string(abi.encodePacked(toString(region), ".", number, ".", GENERAL_ASSEMBLY_POSTFIX));
-    }
-
-    function localGeneralAssemblyX(Region region, uint256 number) internal pure returns (uint256) {
-        return uint256(keccak256(abi.encodePacked(localGeneralAssembly(region, number), ".X")));
-    }
-
-    function localGeneralAssemblyY(Region region, uint256 number) internal pure returns (uint256) {
-        return uint256(keccak256(abi.encodePacked(localGeneralAssembly(region, number), ".Y")));
-    }
-
-    function regionalSoviet(Region region) internal pure returns (string memory) {
-        return string(abi.encodePacked(toString(region), ".", SOVIET_POSTFIX));
-    }
-
-    function regionalSovietX(Region region) internal pure returns (uint256) {
-        return uint256(keccak256(abi.encodePacked(regionalSoviet(region), ".X")));
-    }
-
-    function regionalSovietY(Region region) internal pure returns (uint256) {
-        return uint256(keccak256(abi.encodePacked(regionalSoviet(region), ".Y")));
-    }
-
-    function regionalConference(Region region) internal pure returns (string memory) {
-        return string(abi.encodePacked(toString(region), ".", CONFERENCE_POSTFIX));
-    }
-
-    function regionalConferenceX(Region region) internal pure returns (uint256) {
-        return uint256(keccak256(abi.encodePacked(regionalConference(region), ".X")));
-    }
-
-    function regionalConferenceY(Region region) internal pure returns (uint256) {
-        return uint256(keccak256(abi.encodePacked(regionalConference(region), ".Y")));
-    }
-
-    function regionalGeneralAssembly(Region region) internal pure returns (string memory) {
-        return string(abi.encodePacked(toString(region), ".", GENERAL_ASSEMBLY_POSTFIX));
-    }
-
-    function regionalGeneralAssemblyX(Region region) internal pure returns (uint256) {
-        return uint256(keccak256(abi.encodePacked(regionalGeneralAssembly(region), ".X")));
-    }
-
-    function regionalGeneralAssemblyY(Region region) internal pure returns (uint256) {
-        return uint256(keccak256(abi.encodePacked(regionalGeneralAssembly(region), ".Y")));
-    }
-
-    function chairperson() internal pure returns (string memory) {
-        return CHAIRPERSON_POSTFIX;
-    }
-
-    function chairpersonX() internal pure returns (uint256) {
-        return uint256(keccak256(abi.encodePacked(chairperson(), ".X")));
-    }
-
-    function chairpersonY() internal pure returns (uint256) {
-        return uint256(keccak256(abi.encodePacked(chairperson(), ".Y")));
-    }
-
-    function centralSoviet() internal pure returns (string memory) {
-        return SOVIET_POSTFIX;
-    }
-
-    function centralSovietX() internal pure returns (uint256) {
-        return uint256(keccak256(abi.encodePacked(centralSoviet(), ".X")));
-    }
-
-    function centralSovietY() internal pure returns (uint256) {
-        return uint256(keccak256(abi.encodePacked(centralSoviet(), ".Y")));
-    }
-
-    function congress() internal pure returns (string memory) {
-        return CONGRESS_POSTFIX;
-    }
-
-    function congressX() internal pure returns (uint256) {
-        return uint256(keccak256(abi.encodePacked(congress(), ".X")));
-    }
-
-    function congressY() internal pure returns (uint256) {
-        return uint256(keccak256(abi.encodePacked(congress(), ".Y")));
-    }
 
     function toString(Region region) internal pure returns (string memory) {
         if (region == Region.FEDERAL) return "00";

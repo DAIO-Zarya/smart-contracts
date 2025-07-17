@@ -1,100 +1,78 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.28;
 
-import {Checkpoints} from "@openzeppelin-contracts-5.4.0-rc.1/utils/structs/Checkpoints.sol";
 import {EnumerableSet} from "@openzeppelin-contracts-5.4.0-rc.1/utils/structs/EnumerableSet.sol";
 
-import {Codes} from "./libraries/Codes.sol";
+import {Regions} from "./libraries/Regions.sol";
+import {PartyOrgans} from "./libraries/PartyOrgans.sol";
+import {Matricies} from "./libraries/Matricies.sol";
 
 contract Zarya {
-    using Codes for Codes.Region;
-    using Checkpoints for Checkpoints.Trace224;
-    using EnumerableSet for EnumerableSet.UintSet;
+    using EnumerableSet for EnumerableSet.AddressSet;
+    using Regions for Regions.Region;
+    using Matricies for Matricies.PairOfMatricies;
 
-    struct CategoricalCell {
-        Checkpoints.Trace224 categoricalSample;
-        EnumerableSet.UintSet allowedCategories;
-        string xDescription;
-        string yDescription;
+    struct MemberSuggestion {
+        PartyOrgans.PartyOrgan organ;
+        address member;
     }
 
-    struct NumericalCell {
-        Checkpoints.Trace224 numericalSample;
+    struct CategorySuggestion {
+        PartyOrgans.PartyOrgan organ;
+        uint256 x;
+        uint256 y;
+        uint64 category;
+    }
+
+    struct DecimalsSuggestion {
+        PartyOrgans.PartyOrgan organ;
+        uint256 x;
+        uint256 y;
         uint8 decimals;
-        string xDescription;
-        string yDescription;
     }
 
-    mapping(uint256 x => mapping(uint256 y => CategoricalCell cell)) internal _categoricalMatrix;
-    mapping(uint256 x => mapping(uint256 y => NumericalCell cell)) internal _numericalMatrix;
-
-    error CategoryAlreadyExists(uint64 category);
-    error InvalidCategory(uint64 category);
-
-    event ValueAdded(uint256 indexed x, uint256 indexed y, uint64 value, address indexed author);
-    event CategoryAdded(uint256 indexed x, uint256 indexed y, uint64 category);
-
-    function _addValue(uint256 x, uint256 y, uint64 value, address author, bool isCategorical) internal {
-        if (isCategorical) {
-            if (!_categoricalMatrix[x][y].allowedCategories.contains(value)) {
-                revert InvalidCategory(value);
-            }
-            _categoricalMatrix[x][y].categoricalSample.push(
-                uint32(block.timestamp), uint224(bytes28(abi.encodePacked(author, value)))
-            );
-        } else {
-            _numericalMatrix[x][y].numericalSample.push(
-                uint32(block.timestamp), uint224(bytes28(abi.encodePacked(author, value)))
-            );
-        }
-        emit ValueAdded(x, y, value, author);
+    struct ThemeSuggestion {
+        bool isCategorical;
+        uint256 x;
+        string theme;
     }
 
-    function _addCategory(uint256 x, uint256 y, uint64 category) internal {
-        if (!_categoricalMatrix[x][y].allowedCategories.add(category)) {
-            revert CategoryAlreadyExists(category);
-        }
-        emit CategoryAdded(x, y, category);
+    struct StatementSuggestion {
+        bool isCategorical;
+        uint256 x;
+        uint256 y;
+        string statement;
     }
 
-    function _setNumericalCellDescription(uint256 x, uint256 y, string memory xDescription, string memory yDescription)
-        external
-    {
-        _numericalMatrix[x][y].xDescription = xDescription;
-        _numericalMatrix[x][y].yDescription = yDescription;
+    struct CategoricalValueSuggestion {
+        PartyOrgans.PartyOrgan organ;
+        uint256 x;
+        uint256 y;
+        uint64 value;
+        address author;
     }
 
-    function _setCategoricalCellDescription(
-        uint256 x,
-        uint256 y,
-        string memory xDescription,
-        string memory yDescription
-    ) external {
-        _categoricalMatrix[x][y].xDescription = xDescription;
-        _categoricalMatrix[x][y].yDescription = yDescription;
+    struct NumericalValueSuggestion {
+        PartyOrgans.PartyOrgan organ;
+        uint256 x;
+        uint256 y;
+        uint64 value;
+        address author;
     }
 
-    function _setDecimals(uint256 x, uint256 y, uint8 decimals) external {
-        _numericalMatrix[x][y].decimals = decimals;
-    }
+    mapping(PartyOrgans.PartyOrgan => EnumerableSet.AddressSet members) internal _membersByOrgan;
 
-    function findCategoricalValue(uint256 x, uint256 y, uint32 timestamp) external view returns (uint224) {
-        return _categoricalMatrix[x][y].categoricalSample.upperLookup(timestamp);
-    }
+    Matricies.PairOfMatricies internal _matricies;
 
-    function findNumericalValue(uint256 x, uint256 y, uint32 timestamp) external view returns (uint224) {
-        return _numericalMatrix[x][y].numericalSample.upperLookup(timestamp);
-    }
+    // suggest new member to an organ
 
-    function isCategoryAllowed(uint256 x, uint256 y, uint64 category) external view returns (bool) {
-        return _categoricalMatrix[x][y].allowedCategories.contains(category);
-    }
+    // suggest new category to be added for categorical matrix cell
 
-    // organ management operations
+    // suggest new decimals to be added for numerical matrix cell
 
-    // suggest new category into x,y point in categorical matrix
+    // suggest new theme to be added for a cell
 
-    // suggest new x,y point in numerical matrix
+    // suggest new statement to be added for a cell
 
     // suggest new value to be added for categorical matrix cell
 
