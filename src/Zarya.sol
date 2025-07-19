@@ -13,9 +13,9 @@ contract Zarya {
     using EnumerableSet for EnumerableSet.AddressSet;
     using Votings for Votings.Voting;
 
-    mapping(uint256 => Votings.Voting) internal _votings;
-    uint256 internal _nextVotingId;
+    uint256 public nextVotingId;
 
+    mapping(uint256 => Votings.Voting) internal _votings;
     PartyOrgans.MembersRegistry internal _partyMembersRegistry;
     Matricies.PairOfMatricies internal _matricies;
 
@@ -27,7 +27,7 @@ contract Zarya {
     }
 
     modifier votingExists(uint256 votingId) {
-        if (votingId >= _nextVotingId) {
+        if (votingId >= nextVotingId) {
             revert Votings.VotingNotFound(votingId);
         }
         _;
@@ -38,7 +38,7 @@ contract Zarya {
         onlyActiveMember(organ)
         returns (uint256 votingId)
     {
-        votingId = ++_nextVotingId;
+        votingId = ++nextVotingId;
         _votings[votingId].createMembershipVoting(votingId, msg.sender, duration, organ, member);
     }
 
@@ -47,7 +47,7 @@ contract Zarya {
         onlyActiveMember(organ)
         returns (uint256 votingId)
     {
-        votingId = ++_nextVotingId;
+        votingId = ++nextVotingId;
         _votings[votingId].createCategoryVoting(votingId, msg.sender, duration, organ, x, y, category);
     }
 
@@ -56,7 +56,7 @@ contract Zarya {
         onlyActiveMember(organ)
         returns (uint256 votingId)
     {
-        votingId = ++_nextVotingId;
+        votingId = ++nextVotingId;
         _votings[votingId].createDecimalsVoting(votingId, msg.sender, duration, organ, x, y, decimals);
     }
 
@@ -64,7 +64,7 @@ contract Zarya {
         external
         returns (uint256 votingId)
     {
-        votingId = ++_nextVotingId;
+        votingId = ++nextVotingId;
         _votings[votingId].createThemeVoting(votingId, msg.sender, duration, isCategorical, x, theme);
     }
 
@@ -72,7 +72,7 @@ contract Zarya {
         external
         returns (uint256 votingId)
     {
-        votingId = ++_nextVotingId;
+        votingId = ++nextVotingId;
         _votings[votingId].createStatementVoting(votingId, msg.sender, duration, isCategorical, x, y, statement);
     }
 
@@ -84,7 +84,7 @@ contract Zarya {
         address valueAuthor,
         uint256 duration
     ) external onlyActiveMember(organ) returns (uint256 votingId) {
-        votingId = ++_nextVotingId;
+        votingId = ++nextVotingId;
         _votings[votingId].createCategoricalValueVoting(votingId, msg.sender, duration, organ, x, y, value, valueAuthor);
     }
 
@@ -96,7 +96,7 @@ contract Zarya {
         address valueAuthor,
         uint256 duration
     ) external onlyActiveMember(organ) returns (uint256 votingId) {
-        votingId = ++_nextVotingId;
+        votingId = ++nextVotingId;
         _votings[votingId].createNumericalValueVoting(votingId, msg.sender, duration, organ, x, y, value, valueAuthor);
     }
 
@@ -139,9 +139,5 @@ contract Zarya {
 
     function isVotingFinalized(uint256 votingId) external view votingExists(votingId) returns (bool) {
         return _votings[votingId].isFinalized();
-    }
-
-    function getNextVotingId() external view returns (uint256) {
-        return _nextVotingId;
     }
 }
